@@ -5,7 +5,9 @@ This workshop runs in us-east-1 region only.
 
 ## Costs
 
-This workshop should only cost $2-5 to run, as long as you follow the cleanup steps at the end.  Note - one of the LLMs used is Claude Instant, offered through the AWS Marketplace by Anthropic.  The use of Cluade Instant may not be covered by AWS credits, however in testing this element only cost $0.10.
+This workshop should only cost $2-5 to run, as long as you follow the cleanup steps at the end.  Note - one of the LLMs used is Claude Instant, offered through the AWS Marketplace by Anthropic.  
+
+The use of Claude Instant may not be covered by AWS credits, however in testing this element only cost $0.10.
 
 ## Pre-requisites
 
@@ -21,4 +23,18 @@ In order to run this workshop you should have the AWS CLI installed and be [auth
 
 - In the AWS console, search for Amazon Bedrock, and select Amazon Bedrock from the list of services.
 ![bedrock-locate](readme-images/bedrock-locate.png)
-
+- Next, choose the “Get Started” button in the home page
+![bedrock-get-started](readme-images/bedrock-get-started.png)
+- When clicking on it for the very first time, a pop-up appears in the next page. Choose “Manage model access” in this pop-up.
+![bedrock-manage-model-access](readme-images/bedrock-manage-model-access.png)
+- If this is not the first time you access this page, the Model access button is available in the bottom left of the navigation pane.
+![bedrock-locate-model-access](readme-images/bedrock-locate-model-access.png)
+- Choose the “Manage model access” button again which is visible on the top right side to request access for the needed models
+![bedrock-model-access-request](readme-images/bedrock-model-access-request.png)
+- Choose “Submit use case details” button in the “Anthropic” row.
+![bedrock-anthropic-use-case](readme-images/bedrock-anthropic-use-case.png)
+- Add the following information to the use case details form, leave the rest as is.
+  - Question: "Company name":
+  `Amazon Web Services`
+-
+![](readme-images/)
