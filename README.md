@@ -182,7 +182,7 @@ The SageMaker Multi-Model Endpoint used requires a minimum of ml.g5.2xlarge to h
 
 ### Architecture
 
-![lab2_arch.png](readme-image/lab2_arch.png)
+![lab2_arch.png](readme-images/lab2_arch.png)
 
 ### Deep Learning containers
 
@@ -197,11 +197,11 @@ In machine learning, diffusion models are a class of generative models that simu
 - Open the Sagemaker Studio notebook which you set up during the environment setup
 - In the file browser navigate to lab 2.
 
-  ![open_lab2_notebook](readme-image/open_lab2_notebook.png)
+  ![open_lab2_notebook](readme-images/open_lab2_notebook.png)
 
 - Click on the Jupyter Notebook "00_stablediffusion.ipynb", a Set up notebook environment window opens. Select Image: Data Science 3.0 and Kernel: Python 3.
 
-  ![WSS-NotebookSetup01_03 (1)](readme-image/WSS-NotebookSetuplab2.png)
+  ![WSS-NotebookSetup01_03 (1)](readme-images/WSS-NotebookSetuplab2.png)
 
 - This notebook requires a minimum of an ml.m5.large instance to build the conda environment required for hosting the Stable Diffusion models.
 - Continue to follow the instructions in the Jupyter Notebook.
