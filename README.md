@@ -40,7 +40,20 @@ In order to run this workshop you should have the AWS CLI installed and be [auth
 
   ![bedrock-anthropic-use-case](readme-images/bedrock-anthropic-use-case.png)
 - Add the following information to the use case details form, leave the rest as is.
-  - Question: "Company name":
-  `Amazon Web Services`
--
-![](readme-images/)
+  - Question: "Company name": `Amazon Web Services`
+  - Question: "Company website URL": `https://aws.amazon.com/`
+  - Question "What industry do you operate in?"
+    - Select "Other", add this text: `workshop`
+  - Question “Who are your intended users?”
+    - Select “Internal employees”
+  - Question “Will you be using Anthropic models for any of the following purposes?”
+    - Select “None of the above”
+  - Question “Describe your use cases (do not share any PII or IP information)”: `Using Claude Instant for AWS DeepRacer workshop`
+  - Click the "Submit" button at the end of the form.
+  - After submitting the form, the button next to “Anthropic” shows as “Use case details submitted”
+
+   ![bedrock-anthropic-use-case-submitted](readme-images/bedrock-anthropic-use-case-submitted.png)
+   - Check the check boxes next “Titan Embeddings G1 – Text” and "Claude Instant" and scroll to the bottom of the page and choose “Request model access”.
+
+   ![bedrock-select-models](readme-images/bedrock-select-models.png)
+   - Once requested, the status for Titan Embeddings G1 – Text should immediately be “Access granted”. Claude Instant should change from “Available to request” to “In Progress”. It normally takes around 1 minute for the status to become “Access granted”.
