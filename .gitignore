@@ -1,0 +1,24 @@
+.ipynb_checkpoints
+.venv
+
+utils/__pycache__
+
+
+code_repo.tgz
+02_model_evaluator_using_agents/downloaded
+02_model_evaluator_using_agents/extracted
+
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Jupyter Notebook
+04_stabeledifussion/**.ipynb_checkpoints
+
+# tar-gz files
+04_stabeledifussion/**.tar.gz
+
+# checkpoints
+04_stabeledifussion/**/checkpoint

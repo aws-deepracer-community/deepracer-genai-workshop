@@ -1,0 +1,358 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: CloudFormation Templates for provisioning SageMaker studio domain and resources for interacting with Amazon Bedrock and AWS DeepRacer
+
+Parameters:
+  UserProfileName:
+    Type: String
+    Description: user profile name
+    Default: WorkshopParticipant
+  MyAssetsBucketName:
+    Description: Assets bucket name
+    Type: String
+  MyAssetsBucketPrefix:
+    Description: Assets bucket prefix
+    Type: String
+
+
+Mappings:
+  RegionMap:
+    us-east-1:
+      datascience: "arn:aws:sagemaker:us-east-1:081325390199:image/sagemaker-data-science-310-v1"
+    us-west-2:
+      datascience: "arn:aws:sagemaker:us-west-2:236514542706:image/sagemaker-data-science-310-v1"
+
+
+Resources:
+  VPCId:
+    Type: AWS::EC2::VPC
+    DeletionPolicy: Delete
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      InstanceTenancy: default
+      Tags:
+        - Key: Name
+          Value: !Sub "SageMaker Studio VPC-${AWS::StackName}"
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+
+  VPCGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref VPCId
+      InternetGatewayId: !Ref InternetGateway
+
+  SubnetIds:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPCId
+      CidrBlock: 10.0.0.0/24
+      MapPublicIpOnLaunch: true
+
+  RouteTable:
+    Type: AWS::EC2::RouteTable
+    DeletionPolicy: Delete
+    Properties:
+      VpcId: !Ref VPCId
+
+  InternetRoute:
+    Type: AWS::EC2::Route
+    DependsOn: InternetGateway
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+      RouteTableId: !Ref RouteTable
+
+  SubnetIdsRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref RouteTable
+      SubnetId: !Ref SubnetIds
+
+  SageMakerExecutionRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - sagemaker.amazonaws.com
+            Action:
+              - "sts:AssumeRole"
+      Path: /
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSageMakerFullAccess
+
+  UserProfile:
+    Type: AWS::SageMaker::UserProfile
+    DeletionPolicy: Delete
+    DependsOn: StudioDomain
+    Properties:
+      DomainId: !GetAtt StudioDomain.DomainId
+      UserProfileName: !Ref UserProfileName
+      UserSettings:
+        ExecutionRole: !GetAtt SageMakerExecutionRole.Arn
+
+  JupyterServer:
+    Type: AWS::SageMaker::App
+    DeletionPolicy: Delete
+    DependsOn: UserProfile
+    Properties:
+      AppName: 'default'
+      AppType: JupyterServer
+      DomainId: !GetAtt StudioDomain.DomainId
+      UserProfileName: !Ref UserProfileName
+
+  LambdaExecutionRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - "sts:AssumeRole"
+      Path: /
+
+  LambdaExecutionPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Path: /
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: CloudWatchLogsPermissions
+            Effect: Allow
+            Action:
+              - logs:CreateLogGroup
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Resource: !Sub "arn:${AWS::Partition}:logs:*:*:*"
+          - Sid: SageMakerDomainPermission
+            Effect: Allow
+            Action:
+              - sagemaker:CreateDomain
+              - sagemaker:DescribeDomain
+              - sagemaker:DeleteDomain
+              - sagemaker:UpdateDomain
+              - sagemaker:CreateUserProfile
+              - sagemaker:UpdateUserProfile
+              - sagemaker:DeleteUserProfile
+              - sagemaker:DescribeUserProfile
+            Resource:
+              - !Sub "arn:${AWS::Partition}:sagemaker:*:*:domain/*"
+              - !Sub "arn:${AWS::Partition}:sagemaker:*:*:user-profile/*"
+          - Sid: SageMakerExecPassRole
+            Effect: Allow
+            Action:
+              - iam:PassRole
+            Resource: !GetAtt  SageMakerExecutionRole.Arn
+          - Sid: EFSPermission
+            Effect: Allow
+            Action:
+              - elasticfilesystem:DeleteFileSystem
+            Resource: !Sub "arn:${AWS::Partition}:elasticfilesystem:*:*:file-system/*"
+          - Sid: ServiceLinkedRole
+            Effect: Allow
+            Action:
+              - iam:CreateServiceLinkedRole
+            Resource:
+              - !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/aws-service-role/sagemaker.amazonaws.com/AWSServiceRoleForAmazonSageMakerNotebooks"
+      Roles:
+        - !Ref  LambdaExecutionRole
+
+  StudioDomainFunction:
+    Type: AWS::Lambda::Function
+    DependsOn: LambdaExecutionPolicy
+    Properties:
+      Handler: domain_function.lambda_handler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Code:
+          S3Bucket: !Ref MyAssetsBucketName
+          S3Key: !Sub "${MyAssetsBucketPrefix}custom_resources/domain_function.zip"
+      Runtime: python3.11
+      Timeout: 900
+      Layers:
+      - !Ref CfnResponseLayer
+
+  CfnResponseLayer:
+    Type: AWS::Lambda::LayerVersion
+    Properties:
+      CompatibleRuntimes:
+        - python3.11
+      Content:
+            S3Bucket: !Ref MyAssetsBucketName
+            S3Key: !Sub "${MyAssetsBucketPrefix}custom_resources/cfnResponse_layer.zip"
+      Description: cfn_response layer
+      LayerName: cfn-response
+
+  StudioDomain:
+    Type: Custom::StudioDomain
+    Properties:
+      ServiceToken: !GetAtt StudioDomainFunction.Arn
+      VPC: !Ref VPCId
+      SubnetIds: !Ref SubnetIds
+      DomainName: 'DeepRacerL400GenAI'
+      DefaultUserSettings:
+        ExecutionRole: !GetAtt SageMakerExecutionRole.Arn
+        DefaultLandingUri: 'app:JupyterServer:'
+
+  # Needed for lab1 to get the name of DeepRacerModelExportBucket and DeepRacerCopyToS3Role.Arn
+  CloudformationPolicy:
+      Type: 'AWS::IAM::Policy'
+      Properties:
+          PolicyName: cloudformation-access
+          PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+              -   Effect: "Allow"
+                  Action:
+                      - "cloudformation:DescribeStacks"
+                  Resource: !Ref AWS::StackId
+          Roles:
+              - !Ref SageMakerExecutionRole
+
+  BedrockPolicy:
+      Type: 'AWS::IAM::Policy'
+      Properties:
+          PolicyName: bedrock-access
+          PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+              -   Effect: "Allow"
+                  Action:
+                      - "bedrock:InvokeModel"
+                  Resource:
+                    - "arn:aws:bedrock:*::foundation-model/anthropic.claude-instant-v1"
+                    - "arn:aws:bedrock:*::foundation-model/amazon.titan-embed-text-v1"
+          Roles:
+              - !Ref SageMakerExecutionRole
+
+  DeepRacerPolicy:
+      Type: 'AWS::IAM::Policy'
+      Properties:
+          PolicyName: deepracer-access
+          PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+              -   Effect: "Allow"
+                  Action:
+                      - "deepracer:GetAssetUrl"
+                      - "deepracer:GetModel"
+                      - "deepracer:GetTrack"
+                      - "deepracer:ListTracks"
+                      - "deepracer:ListModels"
+                      - "deepracer:ListLeaderboards"
+                      - "deepracer:ListLeaderboardSubmissions"
+                      - "deepracer:ListPrivateLeaderboardParticipants"
+                  Resource: '*'
+              -   Effect: "Allow"
+                  Action:
+                      - "iam:PassRole"
+                  Resource: !GetAtt DeepRacerCopyToS3Role.Arn
+              -   Effect: "Allow"
+                  Action:
+                      - "s3:GetObject"
+                      - "s3:DeleteObject"
+                  Resource:
+                      - !Sub "arn:aws:s3:::${DeepRacerModelExportBucket}"
+                      - !Sub "arn:aws:s3:::${DeepRacerModelExportBucket}/*"
+          Roles:
+              - !Ref SageMakerExecutionRole
+
+  # Role passed to DeepRacer service for copying models to S3
+  DeepRacerCopyToS3Role:
+    Type: "AWS::IAM::Role"
+    Properties:
+        AssumeRolePolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Principal:
+                    Service:
+                        - "deepracer.amazonaws.com"
+                Action:
+                    - "sts:AssumeRole"
+        Path: "/"
+        ManagedPolicyArns:
+          - arn:aws:iam::aws:policy/AWSDeepRacerFullAccess
+
+  DeepRacerS3ExportPolicy:
+        Type: 'AWS::IAM::Policy'
+        Properties:
+            PolicyName: model-import-s3-policy
+            PolicyDocument:
+                Version: "2012-10-17"
+                Statement:
+                -   Effect: "Allow"
+                    Action:
+                        - "s3:PutObject"
+                    Resource:
+                        - !Sub "arn:aws:s3:::${DeepRacerModelExportBucket}"
+                        - !Sub "arn:aws:s3:::${DeepRacerModelExportBucket}/*"
+            Roles:
+                - !Ref DeepRacerCopyToS3Role
+
+  # S3 bucket for storing DeepRacer models copied from DeepRacer service
+  DeepRacerModelExportBucket:
+    Type: 'AWS::S3::Bucket'
+
+Outputs:
+  DeepRacerModelExportBucketOutput:
+    Description: S3 Bucket used for exporting DeepRacer models
+    Value: !Ref DeepRacerModelExportBucket
+  DeepRacerCopyToS3RoleArn:
+    Description: IAM role used by DeepRacer service to copy models to S3
+    Value: !GetAtt DeepRacerCopyToS3Role.Arn
+  VPCID:
+    Description: VPC Deployed
+    Value: !Ref VPCId
+  InternetGatewayID:
+    Description: VPC Internet Gateway
+    Value: !Ref InternetGateway
+  SubnetIDs:
+    Description: VPC Subnets IDs
+    Value: !Ref SubnetIds
+  RouteTableID:
+    Description: VPC Route Table
+    Value: !Ref RouteTable
+  SageMakerExecutionRoleARN:
+    Description: SageMaker Execution Role ARN
+    Value: !GetAtt SageMakerExecutionRole.Arn
+  UserProfileName:
+    Description: SageMaker UserProfile Name
+    Value: !Ref UserProfileName
+  StudioDomainID:
+    Description: SageMaker Studio Domain ID
+    Value: !GetAtt StudioDomain.DomainId
+  LambdaExecutionRoleARN:
+    Description: Lambda Execution Role ARN for SageMaker Domain Creation
+    Value: !GetAtt LambdaExecutionRole.Arn
+  LambdaExecutionPolicyName:
+    Description: Lambda Execution Policy for SageMaker Domain Creation
+    Value: !Ref LambdaExecutionPolicy
+  StudioDomainFunctionARN:
+    Description: Lambda StudioDomainFunction Create Function
+    Value: !GetAtt StudioDomainFunction.Arn
+  CfnResponseLayerARN:
+    Description: Layer ARN for Lambda StudioDomainFunction
+    Value: !Ref CfnResponseLayer
+  CloudformationPolicyName:
+    Description: Policy to Read CloudFormation Outputs
+    Value: !Ref CloudformationPolicy
+  BedrockPolicyName:
+    Description: Policy to use Bedrock APIs
+    Value: !Ref BedrockPolicy
+  DeepRacerPolicyName:
+    Description: Policy to use DeepRacer APIs
+    Value: !Ref DeepRacerPolicy
+  DeepRacerS3ExportPolicyName:
+    Description: Policy to export from S3
+    Value: !Ref DeepRacerS3ExportPolicy
