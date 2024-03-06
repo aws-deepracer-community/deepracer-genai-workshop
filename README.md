@@ -21,7 +21,7 @@ In order to run this workshop you should have the AWS CLI installed and be [auth
 
 ### Configure Bedrock LLM Access
 
-- In the AWS console, search for Amazon Bedrock, and select Amazon Bedrock from the list of services.
+- In the AWS console, search for Amazon Bedrock, and select Amazon Bedrock from the list of services, making sure you're in us-east-1.
 
   ![bedrock-locate](readme-images/bedrock-locate.png)
 - Next, choose the “Get Started” button in the home page
@@ -57,3 +57,42 @@ In order to run this workshop you should have the AWS CLI installed and be [auth
 
    ![bedrock-select-models](readme-images/bedrock-select-models.png)
    - Once requested, the status for Titan Embeddings G1 – Text should immediately be “Access granted”. Claude Instant should change from “Available to request” to “In Progress”. It normally takes around 1 minute for the status to become “Access granted”.
+
+   ### Setup Sagemaker
+
+- Once you are in the AWS console, select the US East (N. Virginia) us-east-1 region from the menu in the top right-hand corner of the console.
+
+  ![region_selection](readme-images/region_selection.png)
+
+- Search for Amazon SageMaker in the top search bar and click "Amazon SageMaker" to open the Amazon SageMaker service.
+
+  ![sagemaker-search-service](readme-images/sagemaker-search-service.png)
+
+- Select Studio located on the left hand side of the screen to access Amazon SageMaker Studio.
+
+  ![WSS-SagemakerStudio](readme-images/WSS-SagemakerStudio.png)
+
+- Select WorkshopParticipant as user profile and choose the Open Studio button. If you have more than one domain on Workshop Studio, you would have to select DeepRacerL400GenAI domain before. (It will take around 1-2 minutes to spin up your environment).
+
+  ![WSS-WorkshopStudio](readme-images/WSS-WorkshopStudio.png)
+
+- If you are no longer using the Classic SageMaker Studio interface , then this terminal will not be in the same location.
+    
+    - First, you need to navigate to SageMaker Studio Classic.
+
+    ![SM_Studio_classic](readme-images/SM_Studio_classic.png)
+    - Then open the Classic view.
+
+    ![SM_Studio_classic_open](readme-images/SM_Studio_classic_open.png)
+
+- From Amazon Sagemaker Studio open a new Terminal window from File -> New -> Terminal.
+
+  ![WSS-TerminalWindow](readme-images/WSS-TerminalWindow.png)
+
+- Run the following code to download the Jupyter Notebooks, code example and files used in all labs for this workshop.
+
+  `git clone https://github.com/aws-deepracer-community/deepracer-genai-workshop.git`
+
+- Open the file browser to find the downloaded files, and open the deepracer-genai-workshop folder
+
+  ![access_file_browser](readme-images/access_file_browser.png)
