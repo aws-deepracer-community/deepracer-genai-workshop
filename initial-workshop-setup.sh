@@ -8,7 +8,6 @@ if [$1 == ""]; then
 fi
 
 BUCKET_NAME=$1
-shift
 
 aws s3 mb s3://${BUCKET_NAME} --region us-east-1
 aws s3 cp source s3://${BUCKET_NAME}/custom_resources --exclude "*.yaml" --recursive
