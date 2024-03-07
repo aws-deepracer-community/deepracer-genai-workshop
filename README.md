@@ -13,7 +13,7 @@ The use of Claude Instant may not be covered by AWS credits, however in testing 
 
 ### Configure AWS Account, Roles and S3 via a CloudFormation script
 
-In order to run this workshop you should have the AWS CLI installed and be [authenticated to AWS](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html)
+In order to run this workshop you should have the AWS CLI installed and be [authenticated to AWS](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html), or alternatively use [Cloudshell](https://us-east-1.console.aws.amazon.com/cloudshell/home?region=us-east-1) in the AWS console.
 
 - run `git clone https://github.com/aws-deepracer-community/deepracer-genai-workshop.git`
 - run `cd deepracer-genai-workshop`
