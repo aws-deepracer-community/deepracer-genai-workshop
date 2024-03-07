@@ -7,7 +7,7 @@ This workshop runs in us-east-1 region only.
 
 This workshop should only cost $2-5 to run, as long as you follow the cleanup steps at the end.  Note - one of the LLMs used is Claude Instant, offered through the AWS Marketplace by Anthropic.  
 
-The use of Claude Instant may not be covered by AWS credits, however in testing this element only cost $0.10.
+The use of Claude Instant may not be covered by AWS credits as it's an AWS Marketplace product, it's recommended if you're using AWS Credits to check if they cover marketplace.  In testing this element only cost $0.10 to run the workshop if you're not covered for it with AWS credits.
 
 ## Pre-requisites
 
@@ -64,11 +64,11 @@ In order to run this workshop you should have the AWS CLI installed and be [auth
 
   ![region_selection](readme-images/region_selection.png)
 
-- Search for Amazon SageMaker in the top search bar and click "Amazon SageMaker" to open the Amazon SageMaker service.
+- Search for [Amazon SageMaker](https://us-east-1.console.aws.amazon.com/sagemaker/home?region=us-east-1#/landing) in the top search bar and click "Amazon SageMaker" to open the Amazon SageMaker service.
 
   ![sagemaker-search-service](readme-images/sagemaker-search-service.png)
 
-- Select Studio located on the left hand side of the screen to access Amazon SageMaker Studio.
+- Select Studio located on the left hand side of the screen to access [Amazon SageMaker Studio](https://us-east-1.console.aws.amazon.com/sagemaker/home?region=us-east-1#/studio-landing).
 
   ![WSS-SagemakerStudio](readme-images/WSS-SagemakerStudio.png)
 
@@ -76,7 +76,7 @@ In order to run this workshop you should have the AWS CLI installed and be [auth
 
   ![WSS-WorkshopStudio](readme-images/WSS-WorkshopStudio.png)
 
-- If you are no longer using the Classic SageMaker Studio interface , then this terminal will not be in the same location.
+- If you are no longer using the [Classic SageMaker Studio interface](https://docs.aws.amazon.com/sagemaker/latest/dg/studio-updated.html) , then this terminal will not be in the same location.
     
     - First, you need to navigate to SageMaker Studio Classic.
 
@@ -101,11 +101,11 @@ In order to run this workshop you should have the AWS CLI installed and be [auth
 
 ### Introduction
 
-This hands-on workshop demonstrates how to build an intelligent conversational agent using Amazon Bedrock  with Anthropic Claude , a large language model (LLM), combined with the Langchain  library. The agent is designed to provide insights and recommendations about AWS DeepRacer models and training.
+This hands-on workshop demonstrates how to build an intelligent conversational agent using [Amazon Bedrock](https://aws.amazon.com/bedrock/) with [Anthropic Claude](https://aws.amazon.com/bedrock/claude/), a large language model (LLM), combined with the [Langchain](https://python.langchain.com/docs/get_started/introduction) library. The agent is designed to provide insights and recommendations about AWS DeepRacer models and training.
 
 The workshop shows how to:
 
-Create custom Langchain tools to allow the agent to interface with the AWS DeepRacer  service API. This includes listing available models, downloading model artifacts, and extracting model metadata like the training data and reward function.
+Create custom Langchain tools to allow the agent to interface with the [AWS DeepRacer](https://aws.amazon.com/deepracer/) service API. This includes listing available models, downloading model artifacts, and extracting model metadata like the training data and reward function.
 
 Initialize a ReAct agent in Langchain and make the custom tools available to it. The agent can reason about which tools to invoke based on the user's questions.
 
@@ -171,15 +171,15 @@ However, ReAct does have some challenges. Non-informative actions can derail rea
 
 ### Introduction
 
-In this workshop, you will learn how to leverage generative AI models like Stable Diffusion from stability.ai  to enhance simulated training data for reinforcement learning. We will cover deploying Stable Diffusion models on Amazon SageMaker , using the models to modify simulated AWS DeepRacer  track images and add real-world elements, analyzing how improvements to simulated data impact model predictions, and prompt engineering for controlled image generation.
+In this workshop, you will learn how to leverage generative AI models like Stable Diffusion from [stability.ai](https://stability.ai/) to enhance simulated training data for reinforcement learning. We will cover deploying Stable Diffusion models on Amazon SageMaker , using the models to modify simulated [AWS DeepRacer](https://aws.amazon.com/sagemaker/) track images and add real-world elements, analyzing how improvements to simulated data impact model predictions, and prompt engineering for controlled image generation.
 
 You will gain hands-on experience packaging multiple Stable Diffusion models together, deploying them to a Amazon SageMaker endpoint, querying the endpoint to generate enhanced images, and visualizing how a pre-trained AWS DeepRacer model responds to the improved simulated data.
 
 ![deepracer_track_source_to_heat_map](readme-images/deepracer_track_source_to_heat_map.png)
 
-We will deploy multiple variations of Stable Diffusion on a single Amazon SageMaker Multi-Model GPU Endpoint (MME GPU) powered by NVIDIA Triton Inference Server .
+We will deploy multiple variations of Stable Diffusion on a single Amazon SageMaker Multi-Model GPU Endpoint (MME GPU) powered by [NVIDIA Triton Inference Server](https://docs.aws.amazon.com/sagemaker/latest/dg/triton.html).
 
-This workshop uses references from the Sagemaker Examples  notebook and the DeepRacer Log Analysis  notebook
+This workshop uses references from the [Sagemaker Examples](https://github.com/aws/amazon-sagemaker-examples/tree/main/inference/generativeai/llm-workshop/lab2-stable-diffusion/option3-triton-mme) notebook and the [DeepRacer Log Analysis](https://github.com/aws-solutions-library-samples/guidance-for-training-an-aws-deepracer-model-using-amazon-sagemaker/blob/master/log-analysis/DeepRacer%20Log%20Analysis.ipynb) notebook
 
 The SageMaker Multi-Model Endpoint used requires a minimum of ml.g5.2xlarge to host the Stable Diffusion models required for this lab
 
@@ -189,7 +189,7 @@ The SageMaker Multi-Model Endpoint used requires a minimum of ml.g5.2xlarge to h
 
 ### Deep Learning containers
 
-AWS Deep Learning Containers  are a set of Docker images for training and serving models in TensorFlow, TensorFlow 2, PyTorch, and Apache MXNet (Incubating). Deep Learning Containers provide optimized environments with TensorFlow and MXNet, Nvidia CUDA (for GPU instances), and Intel MKL (for CPU instances) libraries and are available in the Amazon Elastic Container Registry (Amazon ECR). Amazon SageMaker enables customers to deploy a model using custom code with NVIDIA Triton Inference Server. This functionality is available through the development of Triton Inference Server Containers.
+[AWS Deep Learning Containers](https://docs.aws.amazon.com/deep-learning-containers/latest/devguide/what-is-dlc.html) are a set of Docker images for training and serving models in TensorFlow, TensorFlow 2, PyTorch, and Apache MXNet (Incubating). Deep Learning Containers provide optimized environments with TensorFlow and MXNet, Nvidia CUDA (for GPU instances), and Intel MKL (for CPU instances) libraries and are available in the Amazon Elastic Container Registry (Amazon ECR). Amazon SageMaker enables customers to deploy a model using custom code with NVIDIA Triton Inference Server. This functionality is available through the development of Triton Inference Server Containers.
 
 ### Image to image diffusion models
 
@@ -207,7 +207,10 @@ In machine learning, diffusion models are a class of generative models that simu
   ![WSS-NotebookSetup01_03 (1)](readme-images/WSS-NotebookSetuplab2.png)
 
 - This notebook requires a minimum of an ml.m5.large instance to build the conda environment required for hosting the Stable Diffusion models.
-- Continue to follow the instructions in the Jupyter Notebook.
+- After a short period the notebook will start.  Continue to follow the instructions in the Jupyter notebook.
+- If you're unfamiliar with Jupyter Notebooks they're a combination of documentation and executable code.  To execute a block of code click on the code block and press the 'Play' button at the top of the notebook.  You'll then see the output of the execution below the code block, and there will be a star [*] next to the code block until it finishes executing, when it'll change to a number which increments with each block that is executed.  
+
+  ![jupyter-execute](readme-images/jupyter-execute.png)
 
 ## Summary
 
@@ -239,7 +242,7 @@ To avoid unnecessary costs if you are using your own account, we recommend runni
 
 - Run the clean up section in the Jupyter notebook of each lab.
 - Delete all the Apps created under the Domain "DeepRacerL400GenAI" and User "workshopparticipant".
-- Open the SageMaker Console .
+- Open the [SageMaker Console](https://console.aws.amazon.com/sagemaker/).
 - On the left navigation pane, choose Admin configurations.
 - Under Admin configurations, choose Domains.
 - Select the Domain that you want to delete, "DeepRacerL400GenAI".
@@ -248,6 +251,6 @@ To avoid unnecessary costs if you are using your own account, we recommend runni
 - From the dropdown list, choose Delete.
 - On the Delete app dialog box, choose Yes, delete app. Then enter delete in the confirmation field, and choose Delete.
 - When Status appears as Deleted for all applications, proceed to the next step.
-- Delete the CloudFormation stacks that were setup during the AWS account access, AWS Cloudformation Console .
-- Inference endpoints stay provisioned until explicitly deleted. If you have already shutdown the Jupyter notebooks without running the cleanup sections, check the Inference > Endpoints page of the SageMaker console  for any other running endpoints or check Sagemaker Endpoints  to delete them.
+- Delete the CloudFormation stacks that were setup during the AWS account access, [AWS Cloudformation Console](https://console.aws.amazon.com/cloudformation/home?#).
+- Inference endpoints stay provisioned until explicitly deleted. If you have already shutdown the Jupyter notebooks without running the cleanup sections, check the [Inference > Endpoints page of the SageMaker console](https://console.aws.amazon.com/sagemaker/home?#/endpoints) for any other running endpoints or check Sagemaker Endpoints  to delete them.
 - If you trained new DeepRacer models or used workshop's pre-trained models, you can follow [these steps](https://catalog.workshops.aws/deepracer-200l/en-US/99-cleanup) to delete them.
