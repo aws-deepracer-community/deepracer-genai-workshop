@@ -86,6 +86,7 @@ Resources:
       Path: /
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AmazonSageMakerFullAccess
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
 
   UserProfile:
     Type: AWS::SageMaker::UserProfile
