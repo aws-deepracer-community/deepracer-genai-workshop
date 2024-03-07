@@ -156,13 +156,16 @@ However, ReAct does have some challenges. Non-informative actions can derail rea
 #### Getting started with the lab
 
  - Open the Sagemaker studio notebook which you set up during the environment set up
- - In the file browser navigate to lab 1
+ - In the file browser navigate to lab 1 by opening the folder '01_model_evaluator_using_agents'
 
    ![open_lab1_notebook](readme-images/open_lab1_notebook.png)
-- Click on the Jupyter Notebook "00_deepracer_model_evaluation.ipynb". A Set up notebook environment window opens. Select Image: Data Science 3.0 and Kernel: Python 3.
+- Click on the Jupyter Notebook "00_deepracer_model_evaluation.ipynb". A Set up notebook environment window opens. Select Image: Data Science 3.0, Kernel: Python 3, Instance Type: ml.m5.large, Start-up script: No script.  Then press the 'Select' button.
 
   ![WSS-NotebookSetup01_03](readme-images/WSS-NotebookSetup01_03.png)
-- Continue to follow the instructions in the Jupyter notebook.
+- After a short period the notebook will start.  Continue to follow the instructions in the Jupyter notebook.
+- If you're unfamiliar with Jupyter Notebooks they're a combination of documentation and executable code.  To execute a block of code click on the code block and press the 'Play' button at the top of the notebook.  You'll then see the output of the execution below the code block, and there will be a star [*] next to the code block until it finishes executing, when it'll change to a number which increments with each block that is executed.  
+
+  ![jupyter-execute](readme-images/jupyter-execute.png)
 
 ## Lab2 - Modify AWS DeepRacer track images using Stable Diffusion and analyze learning pattern
 
@@ -195,11 +198,11 @@ In machine learning, diffusion models are a class of generative models that simu
 ### Getting started with the lab
 
 - Open the Sagemaker Studio notebook which you set up during the environment setup
-- In the file browser navigate to lab 2.
+- In the file browser navigate to lab 2 by opening the folder '02_stabledifussion'
 
   ![open_lab2_notebook](readme-images/open_lab2_notebook.png)
 
-- Click on the Jupyter Notebook "00_stablediffusion.ipynb", a Set up notebook environment window opens. Select Image: Data Science 3.0 and Kernel: Python 3.
+- Click on the Jupyter Notebook "00_stablediffusion.ipynb", a Set up notebook environment window opens. Select Image: Data Science 3.0 and Kernel: Python 3, Instance Type: ml.m5.large, Start-up script: No script.  Then press the 'Select' button.
 
   ![WSS-NotebookSetup01_03 (1)](readme-images/WSS-NotebookSetuplab2.png)
 
@@ -214,37 +217,37 @@ In the first lab, you built a custom conversational agent powered by Anthropic's
 
 Topics covered:
 
-How to build a conversational agent with Amazon Bedrock and Anthropic Claude
-Creating custom Langchain tools to interface with AWS DeepRacer API
-Initializing a ReAct agent in Langchain and providing access to custom tools
-Using prompting techniques like few-shot learning to improve reasoning
-Handling errors gracefully when responses don't match expected format
-Enabling the agent to provide insights on DeepRacer models using custom tools
-The second lab focused on leveraging Stable Diffusion, packaged and deployed on SageMaker, to generate enhanced simulated training data for DeepRacer by modifying track images. You gained first-hand experience in prompt engineering for controlled image generation, analyzing model predictions, and deploying models on SageMaker.
+- How to build a conversational agent with Amazon Bedrock and Anthropic Claude
+- Creating custom Langchain tools to interface with AWS DeepRacer API
+- Initializing a ReAct agent in Langchain and providing access to custom tools
+- Using prompting techniques like few-shot learning to improve reasoning
+- Handling errors gracefully when responses don't match expected format
+- Enabling the agent to provide insights on DeepRacer models using custom tools
+- The second lab focused on leveraging Stable Diffusion, packaged and deployed on SageMaker, to generate enhanced simulated training data for DeepRacer by modifying track images. You gained first-hand experience in prompt engineering for controlled image generation, analyzing model predictions, and deploying models on SageMaker.
 
 Topics covered:
 
-Leveraging Stable Diffusion for simulated training data enhancement
-Deploying Stable Diffusion on Amazon SageMaker
-Using models to modify AWS DeepRacer track images and add realism
-Analyzing impact of improved simulated data on model predictions
-Prompt engineering for controlled image generation
+- Leveraging Stable Diffusion for simulated training data enhancement
+- Deploying Stable Diffusion on Amazon SageMaker
+- Using models to modify AWS DeepRacer track images and add realism
+- Analyzing impact of improved simulated data on model predictions
+- Prompt engineering for controlled image generation
 
 ## Important - Clean Up
 
 To avoid unnecessary costs if you are using your own account, we recommend running the following clean up procedure.
 
-Run the clean up section in the Jupyter notebook of each lab.
-Delete all the Apps created under the Domain "DeepRacerL400GenAI" and User "workshopparticipant".
-Open the SageMaker Console .
-On the left navigation pane, choose Admin configurations.
-Under Admin configurations, choose Domains.
-Select the Domain that you want to delete, "DeepRacerL400GenAI".
-Choose the user "workshopparticipant" in the User profiles list.
-On the User Details page, for each non-failed app in the Apps list, choose Action.
-From the dropdown list, choose Delete.
-On the Delete app dialog box, choose Yes, delete app. Then enter delete in the confirmation field, and choose Delete.
-When Status appears as Deleted for all applications, proceed to the next step.
-Delete the CloudFormation stacks that were setup during the AWS account access, AWS Cloudformation Console .
-Inference endpoints stay provisioned until explicitly deleted. If you have already shutdown the Jupyter notebooks without running the cleanup sections, check the Inference > Endpoints page of the SageMaker console  for any other running endpoints or check Sagemaker Endpoints  to delete them.
-If you trained new DeepRacer models or used workshop's pre-trained models, you can follow [these steps](https://catalog.workshops.aws/deepracer-200l/en-US/99-cleanup) to delete them.
+- Run the clean up section in the Jupyter notebook of each lab.
+- Delete all the Apps created under the Domain "DeepRacerL400GenAI" and User "workshopparticipant".
+- Open the SageMaker Console .
+- On the left navigation pane, choose Admin configurations.
+- Under Admin configurations, choose Domains.
+- Select the Domain that you want to delete, "DeepRacerL400GenAI".
+- Choose the user "workshopparticipant" in the User profiles list.
+- On the User Details page, for each non-failed app in the Apps list, choose Action.
+- From the dropdown list, choose Delete.
+- On the Delete app dialog box, choose Yes, delete app. Then enter delete in the confirmation field, and choose Delete.
+- When Status appears as Deleted for all applications, proceed to the next step.
+- Delete the CloudFormation stacks that were setup during the AWS account access, AWS Cloudformation Console .
+- Inference endpoints stay provisioned until explicitly deleted. If you have already shutdown the Jupyter notebooks without running the cleanup sections, check the Inference > Endpoints page of the SageMaker console  for any other running endpoints or check Sagemaker Endpoints  to delete them.
+- If you trained new DeepRacer models or used workshop's pre-trained models, you can follow [these steps](https://catalog.workshops.aws/deepracer-200l/en-US/99-cleanup) to delete them.
