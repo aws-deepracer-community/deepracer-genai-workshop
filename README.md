@@ -48,7 +48,7 @@ In order to run this workshop you should have the AWS CLI installed and be [auth
     - Select “Internal employees”
   - Question “Will you be using Anthropic models for any of the following purposes?”
     - Select “None of the above”
-  - Question “Describe your use cases (do not share any PII or IP information)”: `Using Claude Instant for AWS DeepRacer workshop`
+  - Question “Describe your use cases (do not share any PII or IP information)”: `Using for DeepRacer workshop`
   - Click the "Submit" button at the end of the form.
   - After submitting the form, the button next to “Anthropic” shows as “Use case details submitted”
 
