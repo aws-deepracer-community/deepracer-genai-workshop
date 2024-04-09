@@ -52,7 +52,7 @@ def deepracer(
     return response.json()
 
 
-def list_models(max_results=100) -> list:
+def list_models(max_results=1000) -> list:
     """
     Lists the models in the Deepracer account.
 
