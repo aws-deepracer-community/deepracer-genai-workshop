@@ -19,6 +19,19 @@ In order to run this workshop you should have the AWS CLI installed and be [auth
 - run `cd deepracer-genai-workshop`
 - run `./initial-workshop-setup.sh <aws_bucket_name_to_create>`
 
+### Request Service Quota
+
+In order to run the Stable Diffussion workshop a Service Quota increase in us-east-1 for 'ml.g5.2xlarge for endpoint usage' to 1 is required.
+
+Navigate to Service Quotas and check Sagemaker for quotas for 'ml.g5.2xlarge for endpoint usage'
+![endpoint-quota](readme-images/endpoint-quota.png)
+
+If the quota is set to zero click on the quota and request it is raised
+![endpoint-quota-detail](readme-images/endpoint-quota-detail.png)
+![endpoint-quota-increase](readme-images/endpoint-quota-increase.png)
+
+You may have to wait 24 hours or so for AWS to enact the quota increase.
+
 ### Configure Bedrock LLM Access
 
 - In the AWS console, search for Amazon Bedrock, and select Amazon Bedrock from the list of services, making sure you're in us-east-1.
